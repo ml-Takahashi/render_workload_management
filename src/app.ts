@@ -7,7 +7,11 @@ const app = new App({
   token: env.SLACK_BOT_TOKEN,
   signingSecret: env.SLACK_SIGNING_SECRET,
   socketMode: false, // Socket Modeは使用しない（Render.comでWebサーバーとして動作）
-  port: env.PORT
+  port: env.PORT,
+  // Event Subscriptions用のエンドポイントを設定
+  endpoints: {
+    events: '/slack/events'
+  }
 });
 
 // コマンドの定義
@@ -106,11 +110,22 @@ app.error(async (error) => {
   console.error('Slack App Error:', error);
 });
 
+// ヘルスチェック用のエンドポイント
+app.receiver.router.get('/health', (req, res) => {
+  res.status(200).json({ 
+    status: 'ok', 
+    timestamp: new Date().toISOString(),
+    message: 'Slack bot is running' 
+  });
+});
+
 // アプリの起動
 const startApp = async (): Promise<void> => {
   try {
     await app.start();
     console.log('⚡️ Slack bot is running!');
+    console.log(`🌐 Health check: http://localhost:${env.PORT}/health`);
+    console.log(`📡 Slack events: http://localhost:${env.PORT}/slack/events`);
   } catch (error) {
     console.error('Failed to start the app:', error);
     process.exit(1);
