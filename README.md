@@ -148,6 +148,37 @@ DMで以下のコマンドが利用できます：
 }
 ```
 
+## セキュリティ
+
+### 機密情報の管理
+
+このプロジェクトでは以下のセキュリティ対策を実装しています：
+
+1. **環境変数の分離**
+   - 実際の機密情報は`.env`ファイルに保存
+   - `.env`ファイルは`.gitignore`でGitから除外
+   - `env.example`にはプレースホルダー値のみ記載
+
+2. **セキュリティチェック**
+   ```bash
+   # 機密情報の漏洩チェック（TypeScript版）
+   pnpm run security-check
+   ```
+
+3. **推奨事項**
+   - 実際のトークンは絶対にコードに直接記述しない
+   - `.env`ファイルを他の人と共有しない
+   - 定期的にセキュリティチェックを実行
+
+### 環境変数の設定例
+
+```bash
+# .env ファイル（Gitにコミットしない）
+SLACK_BOT_TOKEN=xoxb-xxxxxxxxxx-xxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+SLACK_SIGNING_SECRET=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+PORT=3000
+```
+
 ## トラブルシューティング
 
 ### よくある問題
