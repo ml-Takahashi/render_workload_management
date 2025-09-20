@@ -3,8 +3,9 @@ services:
     name: render-workload-management
     env: node
     plan: free
+    rootDir: .
     buildCommand: pnpm install --frozen-lockfile && pnpm run build
-    startCommand: pnpm start
+    startCommand: node dist/app.js
     envVars:
       - key: NODE_ENV
         value: production
